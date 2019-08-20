@@ -8,8 +8,10 @@
 #define LEFT 13 //enable right
 
 #define START 40 //init speed for motor
-#define STEP 20 //multipler for keyboard digits
-#define MANUALSPEED 2 //for 'A' (plus), 'B' (minus) to current speed
+#define END 255 //init speed for motor
+#define STEP 25 //multipler for keyboard digits
+#define MANUALSPEED 5 //for 'A' (plus), 'B' (minus) to current speed
+#define MAX_SPEED 255
 
 
 unsigned long stop_time = 0;
@@ -26,9 +28,9 @@ unsigned long longclick = 0;
 
 //define the cymbols on the buttons of the keypads
 // '0' smooth stop
-// '1' - '9' speed 40 + 20 * STEP * (i-1)
-// 'A' +2 to current speed
-// 'B' +2 to current speed
+// '1' - '9' speed 255 - STEP * (10 - i)
+// 'A' +5 to current speed
+// 'B' -5 to current speed
 // 'C' +15 to the stop timer (Press 4 times, stop after 1 min). The countdown starts at the first click
 // 'D' reset timer
 // '*' forced quick stop. The keyboard will not work until the engine stops.
@@ -89,33 +91,33 @@ void loop() {
             want_motor_speed = START;
           break;
       case '2':
-            want_motor_speed = START + STEP * 1;
+            want_motor_speed = END - STEP * 7;
           break;
       case '3':
-            want_motor_speed = START + STEP * 2;
+            want_motor_speed = END - STEP * 6;
           break;
       case '4':
-            want_motor_speed = START + STEP * 3;
+            want_motor_speed = END - STEP * 5;
           break;
       case '5':
-            want_motor_speed = START + STEP * 4;
+            want_motor_speed = END - STEP * 4;
           break;
       case '6':
-            want_motor_speed = START + STEP * 5;
+            want_motor_speed = END - STEP * 3;
           break;
       case '7':
-            want_motor_speed = START + STEP * 6;
+            want_motor_speed = END - STEP * 2;
           break;
       case '8':
-            want_motor_speed = START + STEP * 7;
+            want_motor_speed = END - STEP * 1;
           break;
       case '9':
-            want_motor_speed = START + STEP * 8;
+            want_motor_speed = END;
           break;
       case 'A':
             want_motor_speed += MANUALSPEED;
-            if (want_motor_speed >= 256){
-              want_motor_speed = 255;
+            if (want_motor_speed > MAX_SPEED){
+              want_motor_speed = MAX_SPEED;
             }
             break;
       case 'B':
@@ -189,4 +191,3 @@ void loop() {
   }
   //Serial.println(motor_speed);
 }
-
